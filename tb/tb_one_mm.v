@@ -73,6 +73,7 @@ module tb_one_mm#(
         #10
         en_one_mm = 0;
         */
+        #10000 $finish;
     end
     
     always #5 clk=~clk;
