@@ -25,9 +25,8 @@ module me#(
     output done_top
 );
 
-//en_pre_me_top,en_me_top,en_one_mm_top signal change
+// en_pre_me_top,en_me_top,en_one_mm_top signal change
 reg convert_en_pre_me_top,convert_en_me_top,convert_en_one_mm_top;
-reg en_one_mm_top_reg,en_me_top_reg,en_pre_me_top_reg;
 
 always@(posedge clk or negedge rst_n)
 begin
@@ -37,12 +36,9 @@ begin
         convert_en_one_mm_top <= 0;
     end
     else begin
-        en_pre_me_top_reg <= en_pre_me_top;
-        en_me_top_reg <= en_me_top;
-        en_one_mm_top_reg <= en_one_mm_top;
-        convert_en_pre_me_top <= en_pre_me_top_reg;
-        convert_en_me_top <= en_me_top_reg;
-        convert_en_one_mm_top <= en_one_mm_top_reg;
+        convert_en_pre_me_top <= en_pre_me_top;
+        convert_en_me_top <= en_me_top;
+        convert_en_one_mm_top <= en_one_mm_top;
     end
 end
 
