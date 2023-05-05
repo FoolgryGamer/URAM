@@ -6011,7 +6011,7 @@
     assign m_n = {slv_reg397[1:0],slv_reg396,slv_reg395,slv_reg394,slv_reg393,slv_reg392,slv_reg391,slv_reg390,slv_reg389,slv_reg388,slv_reg387,slv_reg386,slv_reg385,slv_reg384,slv_reg383,slv_reg382,slv_reg381,slv_reg380,slv_reg379,slv_reg378,slv_reg377,slv_reg376,slv_reg375,slv_reg374,slv_reg373,slv_reg372,slv_reg371,slv_reg370,slv_reg369,slv_reg368,slv_reg367,slv_reg366,slv_reg365,slv_reg364,slv_reg363,slv_reg362,slv_reg361,slv_reg360,slv_reg359,slv_reg358,slv_reg357,slv_reg356,slv_reg355,slv_reg354,slv_reg353,slv_reg352,slv_reg351,slv_reg350,slv_reg349,slv_reg348,slv_reg347,slv_reg346,slv_reg345,slv_reg344,slv_reg343,slv_reg342,slv_reg341,slv_reg340,slv_reg339,slv_reg338,slv_reg337,slv_reg336,slv_reg335,slv_reg334,slv_reg333,slv_reg332,slv_reg331,slv_reg330,slv_reg329,slv_reg328,slv_reg327,slv_reg326,slv_reg325,slv_reg324,slv_reg323,slv_reg322,slv_reg321,slv_reg320,slv_reg319,slv_reg318,slv_reg317,slv_reg316,slv_reg315,slv_reg314,slv_reg313,slv_reg312,slv_reg311,slv_reg310,slv_reg309,slv_reg308,slv_reg307,slv_reg306,slv_reg305,slv_reg304,slv_reg303,slv_reg302,slv_reg301};
     assign m_prime = {slv_reg400[15:0],slv_reg399,slv_reg398};
     
-    me#(
+    paillier_me#(
     .M_SIZE(M_SIZE),
     .RADIX(RADIX),
     .SIZE_LOG(SIZE_LOG),
@@ -6019,7 +6019,7 @@
     .FIFO_AddrWidth(FIFO_AddrWidth),
     .SIZE_ADD(SIZE_ADD),
     .URAM_ADDR(URAM_ADDR)
-)inst_me(
+)inst_paillier_me(
     .clk(S_AXI_ACLK),
     .rst_n(S_AXI_ARESETN),
     .en_pre_me_top(slv_reg0[0]),

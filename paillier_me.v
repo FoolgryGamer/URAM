@@ -1,4 +1,4 @@
-module me#(
+module paillier_me#(
     parameter M_SIZE = 3072,
     parameter RADIX = 72,
     parameter SIZE_LOG = 6,
