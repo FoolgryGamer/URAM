@@ -66,7 +66,7 @@ me_top#(
     .FIFO_AddrWidth(FIFO_AddrWidth),
     .SIZE_ADD(SIZE_ADD),
     .URAM_ADDR(URAM_ADDR)
-)   inst_me_top(
+)inst_me_top(
     .clk(clk),
     .rst_n(rst_n),
     .en_pre_me(en_pre_me),

@@ -621,7 +621,23 @@
 	reg [C_S_AXI_DATA_WIDTH-1:0]	 reg_data_out;
 	integer	 byte_index;
 	reg	 aw_en;
-
+	// user interface
+    parameter M_SIZE = 3072;
+    parameter RADIX = 72;
+    parameter SIZE_LOG = 6;
+    parameter FIFO_DEPTH = 4;
+    parameter FIFO_AddrWidth = 2;
+    parameter SIZE_ADD = 128*25;
+    parameter URAM_ADDR = 12;
+    
+    wire done;
+    wire [M_SIZE-1:0] z;
+    wire [3:0] num_out;
+    wire [M_SIZE-1:0] a;
+    wire [M_SIZE-1:0] e;
+    wire [M_SIZE-1:0] m;
+    wire [M_SIZE+1:0] m_n;
+    wire [RADIX+SIZE_LOG+1:0] m_prime;
 	// I/O Connections assignments
 
 	assign S_AXI_AWREADY	= axi_awready;
@@ -5988,22 +6004,7 @@
 	end    
 
 	// Add user logic here
-    parameter M_SIZE = 3072;
-    parameter RADIX = 72;
-    parameter SIZE_LOG = 6;
-    parameter FIFO_DEPTH = 4;
-    parameter FIFO_AddrWidth = 2;
-    parameter SIZE_ADD = 128*25;
-    parameter URAM_ADDR = 12;
     
-    wire done;
-    wire [M_SIZE-1:0] z;
-    wire [3:0] num_out;
-    wire [M_SIZE-1:0] a;
-    wire [M_SIZE-1:0] e;
-    wire [M_SIZE-1:0] m;
-    wire [M_SIZE+1:0] m_n;
-    wire [RADIX+SIZE_LOG+1:0] m_prime;
     assign a = {slv_reg96,slv_reg95,slv_reg94,slv_reg93,slv_reg92,slv_reg91,slv_reg90,slv_reg89,slv_reg88,slv_reg87,slv_reg86,slv_reg85,slv_reg84,slv_reg83,slv_reg82,slv_reg81,slv_reg80,slv_reg79,slv_reg78,slv_reg77,slv_reg76,slv_reg75,slv_reg74,slv_reg73,slv_reg72,slv_reg71,slv_reg70,slv_reg69,slv_reg68,slv_reg67,slv_reg66,slv_reg65,slv_reg64,slv_reg63,slv_reg62,slv_reg61,slv_reg60,slv_reg59,slv_reg58,slv_reg57,slv_reg56,slv_reg55,slv_reg54,slv_reg53,slv_reg52,slv_reg51,slv_reg50,slv_reg49,slv_reg48,slv_reg47,slv_reg46,slv_reg45,slv_reg44,slv_reg43,slv_reg42,slv_reg41,slv_reg40,slv_reg39,slv_reg38,slv_reg37,slv_reg36,slv_reg35,slv_reg34,slv_reg33,slv_reg32,slv_reg31,slv_reg30,slv_reg29,slv_reg28,slv_reg27,slv_reg26,slv_reg25,slv_reg24,slv_reg23,slv_reg22,slv_reg21,slv_reg20,slv_reg19,slv_reg18,slv_reg17,slv_reg16,slv_reg15,slv_reg14,slv_reg13,slv_reg12,slv_reg11,slv_reg10,slv_reg9,slv_reg8,slv_reg7,slv_reg6,slv_reg5,slv_reg4,slv_reg3,slv_reg2,slv_reg1};
     assign e = {slv_reg196,slv_reg195,slv_reg194,slv_reg193,slv_reg192,slv_reg191,slv_reg190,slv_reg189,slv_reg188,slv_reg187,slv_reg186,slv_reg185,slv_reg184,slv_reg183,slv_reg182,slv_reg181,slv_reg180,slv_reg179,slv_reg178,slv_reg177,slv_reg176,slv_reg175,slv_reg174,slv_reg173,slv_reg172,slv_reg171,slv_reg170,slv_reg169,slv_reg168,slv_reg167,slv_reg166,slv_reg165,slv_reg164,slv_reg163,slv_reg162,slv_reg161,slv_reg160,slv_reg159,slv_reg158,slv_reg157,slv_reg156,slv_reg155,slv_reg154,slv_reg153,slv_reg152,slv_reg151,slv_reg150,slv_reg149,slv_reg148,slv_reg147,slv_reg146,slv_reg145,slv_reg144,slv_reg143,slv_reg142,slv_reg141,slv_reg140,slv_reg139,slv_reg138,slv_reg137,slv_reg136,slv_reg135,slv_reg134,slv_reg133,slv_reg132,slv_reg131,slv_reg130,slv_reg129,slv_reg128,slv_reg127,slv_reg126,slv_reg125,slv_reg124,slv_reg123,slv_reg122,slv_reg121,slv_reg120,slv_reg119,slv_reg118,slv_reg117,slv_reg116,slv_reg115,slv_reg114,slv_reg113,slv_reg112,slv_reg111,slv_reg110,slv_reg109,slv_reg108,slv_reg107,slv_reg106,slv_reg105,slv_reg104,slv_reg103,slv_reg102,slv_reg101};
     assign m = {slv_reg296,slv_reg295,slv_reg294,slv_reg293,slv_reg292,slv_reg291,slv_reg290,slv_reg289,slv_reg288,slv_reg287,slv_reg286,slv_reg285,slv_reg284,slv_reg283,slv_reg282,slv_reg281,slv_reg280,slv_reg279,slv_reg278,slv_reg277,slv_reg276,slv_reg275,slv_reg274,slv_reg273,slv_reg272,slv_reg271,slv_reg270,slv_reg269,slv_reg268,slv_reg267,slv_reg266,slv_reg265,slv_reg264,slv_reg263,slv_reg262,slv_reg261,slv_reg260,slv_reg259,slv_reg258,slv_reg257,slv_reg256,slv_reg255,slv_reg254,slv_reg253,slv_reg252,slv_reg251,slv_reg250,slv_reg249,slv_reg248,slv_reg247,slv_reg246,slv_reg245,slv_reg244,slv_reg243,slv_reg242,slv_reg241,slv_reg240,slv_reg239,slv_reg238,slv_reg237,slv_reg236,slv_reg235,slv_reg234,slv_reg233,slv_reg232,slv_reg231,slv_reg230,slv_reg229,slv_reg228,slv_reg227,slv_reg226,slv_reg225,slv_reg224,slv_reg223,slv_reg222,slv_reg221,slv_reg220,slv_reg219,slv_reg218,slv_reg217,slv_reg216,slv_reg215,slv_reg214,slv_reg213,slv_reg212,slv_reg211,slv_reg210,slv_reg209,slv_reg208,slv_reg207,slv_reg206,slv_reg205,slv_reg204,slv_reg203,slv_reg202,slv_reg201};
@@ -6018,7 +6019,7 @@
     .FIFO_AddrWidth(FIFO_AddrWidth),
     .SIZE_ADD(SIZE_ADD),
     .URAM_ADDR(URAM_ADDR)
-)  inst_me(
+)inst_me(
     .clk(S_AXI_ACLK),
     .rst_n(S_AXI_ARESETN),
     .en_pre_me_top(slv_reg0[0]),

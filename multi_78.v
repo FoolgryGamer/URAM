@@ -51,28 +51,28 @@ module multi
     assign res_13 = result[13][42:0];
     assign res_14 = result[14][42:0];
 
-     genvar i;
-     generate
-         for(i=0;i<5;i=i+1) begin: dsp_generate
-             dsp_macro_0 inst_dsp_0(
-                 .CLK(clk),
-                 .A({1'b0,wire_a[0]}),
-                 .B({1'b0,wire_b[i]}),
-                 .P({result[i]}));
+    genvar i;
+    generate
+        for(i=0;i<5;i=i+1) begin: dsp_generate
+            dsp_macro_0 inst_dsp_0(
+                .CLK(clk),
+                .A({1'b0,wire_a[0]}),
+                .B({1'b0,wire_b[i]}),
+                .P({result[i]}));
 
-             dsp_macro_0 inst_dsp_1(
-                 .CLK(clk),
-                 .A({1'b0,wire_a[1]}),
-                 .B({1'b0,wire_b[i]}),
-                 .P({result[i+5]}));
+            dsp_macro_0 inst_dsp_1(
+                .CLK(clk),
+                .A({1'b0,wire_a[1]}),
+                .B({1'b0,wire_b[i]}),
+                .P({result[i+5]}));
 
-             dsp_macro_0 inst_dsp_2(
-                 .CLK(clk),
-                 .A({1'b0,wire_a[2]}),
-                 .B({1'b0,wire_b[i]}),
-                 .P({result[i+10]}));
-         end
-     endgenerate
+            dsp_macro_0 inst_dsp_2(
+                .CLK(clk),
+                .A({1'b0,wire_a[2]}),
+                .B({1'b0,wire_b[i]}),
+                .P({result[i+10]}));
+        end
+    endgenerate
 
 	// original code(DSP slice usage is not well-scheduled)
     /*
