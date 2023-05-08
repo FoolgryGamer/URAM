@@ -233,7 +233,7 @@ module phase_a
     end
 
     //cnt_0
-    multiplier_radix multiplier_0(clk,rst_n,en_multiplier,{2'd0,reg_m_prime},{2'd0,reg_a_prime},if_last,gamma);// 72*146 (78*158) output:78
+    multiplier_radix multiplier_0(clk,rst_n,en_multiplier,reg_m_prime,{2'd0,reg_a_prime},if_last,gamma);// 72*146 (78*158) output:78
     //cnt_1
     inner_loop_new_78_dsp inner_loop_new(clk, rst_n, gamma, m_n, en_inner_loop, res_r0, res_r1, en_out_inner_loop);
     //cnt_2

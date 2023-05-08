@@ -74,7 +74,7 @@ pipelined_mm
     .en(en_mm),
     
     .last_z(last_c),
-    .last_a({85'd0,last_a}),
+    .last_a({78'd0,last_a}),
     .a(a),
     .b(b),
     .m(m),
