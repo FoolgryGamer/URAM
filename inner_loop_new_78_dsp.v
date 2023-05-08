@@ -193,7 +193,7 @@ module inner_loop_new_78_dsp
 	end
 	end
 
-	always @(flag,rst_n,add2_res) begin
+	always @(flag,rst_n) begin
 		if(~rst_n) begin
 			r0 <= 3152'h0;
 			r1 <= 3152'h0;

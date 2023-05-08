@@ -94,15 +94,15 @@ module me_controller#(
     reg array_done[3:0];
     localparam TYPE_IDLE = 0, TYPE_pre_me = 1, TYPE_me = 2, TYPE_mm = 3;
     reg [1:0] act_i[3:0];
-    /**************************************************** Ä£ÃÝµÄ³õÊ¼»¯ *****************************************************/
+    /**************************************************** Ä£ï¿½ÝµÄ³ï¿½Ê¼ï¿½ï¿½ *****************************************************/
     integer i;
-    always @(posedge clk or negedge rst_n) begin/////////////////////////////////////////////////Ä£ÃÝÀàÐÍÂ¼Èë
+    always @(posedge clk or negedge rst_n) begin/////////////////////////////////////////////////Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½
         if(~rst_n) begin
             for(i=0; i<4; i=i+1) begin
                 act_i[i] <= TYPE_IDLE;
             end
         end
-        else if(en_pre_me) begin //////////////////////Â¼ÈëÐÂµÄÔ¤¼ÆËãÄ£ÃÝ
+        else if(en_pre_me) begin //////////////////////Â¼ï¿½ï¿½ï¿½Âµï¿½Ô¤ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
             if(act_i[0]==TYPE_IDLE) begin
                 act_i[0] <= TYPE_pre_me;
             end
@@ -116,7 +116,7 @@ module me_controller#(
                 act_i[3] <= TYPE_pre_me;
             end
         end
-        else if(en_me) begin ////////////////////////Â¼ÈëÐÂµÄÆÕÍ¨Ä£ÃÝ
+        else if(en_me) begin ////////////////////////Â¼ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½Í¨Ä£ï¿½ï¿½
             if(act_i[0]==TYPE_IDLE) begin
                 act_i[0] <= TYPE_me;
             end
@@ -165,6 +165,9 @@ module me_controller#(
         end
     end
     always@(*) begin
+        if(~rst_n) begin
+            nextstate <= S_IDLE;
+        end
         case(state) 
             S_IDLE: begin
                 if(en_me || en_pre_me || en_one_mm) nextstate <= S_INIT;
@@ -192,7 +195,7 @@ module me_controller#(
     end
     /***************************************************************************************************************************/ 
     wire able_to_enmm = (mm_flag[0]==0 && mm_round == 5'd17) || (mm_flag[1]==0 && mm_round == 5'd3) || (mm_flag[2]==0 && mm_round == 5'd7) || (mm_flag[3]==0 && mm_round == 5'd11);
-    /******************************************************** Ä£³ËµÄÖ´ÐÐ *******************************************************/ 
+    /******************************************************** Ä£ï¿½Ëµï¿½Ö´ï¿½ï¿½ *******************************************************/ 
     integer j;
     always@(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
@@ -233,25 +236,25 @@ module me_controller#(
                     en_mm <= 1;
                     if(array_ready[0]==2'b11) begin
                         if(act_i[0]==TYPE_me)begin
-                            if(which_mm[0]==1'b0) begin// Ò»¸öÑ­»·µÄ¿ªÊ¼
+                            if(which_mm[0]==1'b0) begin// Ò»ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼
                                 if(array_e[0][0]==1'b1) begin
-                                    ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚÒ»¸öÄ£³Ë
+                                    ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[0], 4'b00_00};
                                     a_mm <= array_a[0];
                                     b_mm <= array_r[0];
                                     ////////////////////////
                                     which_mm[0] <= 1'b1;
                                     if(array_e[0]!=1) begin
-                                        array_ready[0] <= 2'b11;//±ê¼ÇµÚ¶þ¸öÄ£³ËÊÇ×¼±¸ºÃµÄ
+                                        array_ready[0] <= 2'b11;//ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ãµï¿½
                                     end
                                     else begin
-                                        array_ready[0] <= 2'b00;//×îºóÒ»ÂÖ£¬ÎÞÐè×öµÚ¶þ¸öÄ£³Ë
+                                        array_ready[0] <= 2'b00;//ï¿½ï¿½ï¿½Ò»ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                         array_e[0] <= array_e[0]>>1;
                                     end
                                 end
                                 else begin
                                     array_e[0] <= array_e[0]>>1;
-                                    ////////////////////////Ìø¹ýÑ­»·ÄÚµÚÒ»¸öÄ£³Ë£¬Ö±½ÓÖ´ÐÐµÚ¶þ¸öÄ£³Ë
+                                    ////////////////////////ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½Ë£ï¿½Ö±ï¿½ï¿½Ö´ï¿½ÐµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[0], 4'b00_10};
                                     a_mm <= array_a[0];
                                     b_mm <= array_a[0];
@@ -262,7 +265,7 @@ module me_controller#(
                             end
                             else begin// current mm is the second one
                                 array_e[0] <= array_e[0]>>1;
-                                ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚ¶þ¸öÄ£³Ë
+                                ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ÚµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                 mm_info_out <= {array_num[0], 4'b00_10};
                                 a_mm <= array_a[0];
                                 b_mm <= array_a[0];
@@ -291,25 +294,25 @@ module me_controller#(
                     end
                     else if(array_ready[1]==2'b11) begin
                         if(act_i[1]==TYPE_me)begin
-                            if(which_mm[1]==1'b0) begin// Ò»¸öÑ­»·µÄ¿ªÊ¼
+                            if(which_mm[1]==1'b0) begin// Ò»ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼
                                 if(array_e[1][0]==1'b1) begin
-                                    ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚÒ»¸öÄ£³Ë
+                                    ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[1], 4'b01_00};
                                     a_mm <= array_a[1];
                                     b_mm <= array_r[1];
                                     ////////////////////////
                                     which_mm[1] <= 1'b1;
                                     if(array_e[1]!=1) begin
-                                        array_ready[1] <= 2'b11;//±ê¼ÇµÚ¶þ¸öÄ£³ËÊÇ×¼±¸ºÃµÄ
+                                        array_ready[1] <= 2'b11;//ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ãµï¿½
                                     end
                                     else begin
-                                        array_ready[1] <= 2'b00;//×îºóÒ»ÂÖ£¬ÎÞÐè×öµÚ¶þ¸öÄ£³Ë
+                                        array_ready[1] <= 2'b00;//ï¿½ï¿½ï¿½Ò»ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                         array_e[1] <= array_e[1]>>1;
                                     end
                                 end
                                 else begin
                                     array_e[1] <= array_e[1]>>1;
-                                    ////////////////////////Ìø¹ýÑ­»·ÄÚµÚÒ»¸öÄ£³Ë£¬Ö±½ÓÖ´ÐÐµÚ¶þ¸öÄ£³Ë
+                                    ////////////////////////ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½Ë£ï¿½Ö±ï¿½ï¿½Ö´ï¿½ÐµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[1], 4'b01_10};
                                     a_mm <= array_a[1];
                                     b_mm <= array_a[1];
@@ -320,7 +323,7 @@ module me_controller#(
                             end
                             else begin// current mm is the second one
                                 array_e[1] <= array_e[1]>>1;
-                                ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚ¶þ¸öÄ£³Ë
+                                ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ÚµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                 mm_info_out <= {array_num[1], 4'b01_10};
                                 a_mm <= array_a[1];
                                 b_mm <= array_a[1];
@@ -349,25 +352,25 @@ module me_controller#(
                     end
                     else if(array_ready[2]==2'b11) begin
                         if(act_i[2]==TYPE_me)begin
-                            if(which_mm[2]==1'b0) begin// Ò»¸öÑ­»·µÄ¿ªÊ¼
+                            if(which_mm[2]==1'b0) begin// Ò»ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼
                                 if(array_e[2][0]==1'b1) begin
-                                    ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚÒ»¸öÄ£³Ë
+                                    ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[2], 4'b1000};
                                     a_mm <= array_a[2];
                                     b_mm <= array_r[2];
                                     ////////////////////////
                                     which_mm[2] <= 1'b1;
                                     if(array_e[2]!=1) begin
-                                        array_ready[2] <= 2'b11;//±ê¼ÇµÚ¶þ¸öÄ£³ËÊÇ×¼±¸ºÃµÄ
+                                        array_ready[2] <= 2'b11;//ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ãµï¿½
                                     end
                                     else begin
-                                        array_ready[2] <= 2'b00;//×îºóÒ»ÂÖ£¬ÎÞÐè×öµÚ¶þ¸öÄ£³Ë
+                                        array_ready[2] <= 2'b00;//ï¿½ï¿½ï¿½Ò»ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                         array_e[2] <= array_e[2]>>1;
                                     end
                                 end
                                 else begin
                                     array_e[2] <= array_e[2]>>1;
-                                    ////////////////////////Ìø¹ýÑ­»·ÄÚµÚÒ»¸öÄ£³Ë£¬Ö±½ÓÖ´ÐÐµÚ¶þ¸öÄ£³Ë
+                                    ////////////////////////ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½Ë£ï¿½Ö±ï¿½ï¿½Ö´ï¿½ÐµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[2], 4'b1010};
                                     a_mm <= array_a[2];
                                     b_mm <= array_a[2];
@@ -378,7 +381,7 @@ module me_controller#(
                             end
                             else begin// current mm is the second one
                                 array_e[2] <= array_e[2]>>1;
-                                ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚ¶þ¸öÄ£³Ë
+                                ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ÚµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                 mm_info_out <= {array_num[2], 4'b1010};
                                 a_mm <= array_a[2];
                                 b_mm <= array_a[2];
@@ -407,25 +410,25 @@ module me_controller#(
                     end
                     else if(array_ready[3]==2'b11) begin
                         if(act_i[3]==TYPE_me)begin
-                            if(which_mm[3]==1'b0) begin// Ò»¸öÑ­»·µÄ¿ªÊ¼
+                            if(which_mm[3]==1'b0) begin// Ò»ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼
                                 if(array_e[3][0]==1'b1) begin
-                                    ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚÒ»¸öÄ£³Ë
+                                    ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[3], 4'b1100};
                                     a_mm <= array_a[3];
                                     b_mm <= array_r[3];
                                     ////////////////////////
                                     which_mm[3] <= 1'b1;
                                     if(array_e[3]!=1) begin
-                                        array_ready[3] <= 2'b11;//±ê¼ÇµÚ¶þ¸öÄ£³ËÊÇ×¼±¸ºÃµÄ
+                                        array_ready[3] <= 2'b11;//ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ãµï¿½
                                     end
                                     else begin
-                                        array_ready[3] <= 2'b00;//×îºóÒ»ÂÖ£¬ÎÞÐè×öµÚ¶þ¸öÄ£³Ë
+                                        array_ready[3] <= 2'b00;//ï¿½ï¿½ï¿½Ò»ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                         array_e[3] <= array_e[3]>>1;
                                     end
                                 end
                                 else begin
                                     array_e[3] <= array_e[3]>>1;
-                                    ////////////////////////Ìø¹ýÑ­»·ÄÚµÚÒ»¸öÄ£³Ë£¬Ö±½ÓÖ´ÐÐµÚ¶þ¸öÄ£³Ë
+                                    ////////////////////////ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½Ä£ï¿½Ë£ï¿½Ö±ï¿½ï¿½Ö´ï¿½ÐµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                     mm_info_out <= {array_num[3], 4'b1110};
                                     a_mm <= array_a[3];
                                     b_mm <= array_a[3];
@@ -436,7 +439,7 @@ module me_controller#(
                             end
                             else begin// current mm is the second one
                                 array_e[3] <= array_e[3]>>1;
-                                ////////////////////////Ö´ÐÐÑ­»·ÄÚµÚ¶þ¸öÄ£³Ë
+                                ////////////////////////Ö´ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ÚµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                                 mm_info_out <= {array_num[3], 4'b1110};
                                 a_mm <= array_a[3];
                                 b_mm <= array_a[3];
@@ -483,11 +486,11 @@ module me_controller#(
                         end
                     end
                     else if(act_i[0]==TYPE_me) begin
-                        if(mm_info_in[1:0]==2'b10) begin// Íê³ÉµÄÄ£³ËÊÇµÚ¶þ¸öÄ£³Ë
+                        if(mm_info_in[1:0]==2'b10) begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                             array_a[0] <= res;
                             array_ready[0] <= 2'b11;
                         end
-                        else begin// Íê³ÉµÄÄ£³ËÊÇµÚÒ»¸öÄ£³Ë
+                        else begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                             if(array_e[0]==0) begin
                                 z <= res;
                                 array_r[0] <= res;
@@ -514,11 +517,11 @@ module me_controller#(
                         end
                     end
                     else if(act_i[1]==TYPE_me) begin
-                        if(mm_info_in[1:0]==2'b10) begin// Íê³ÉµÄÄ£³ËÊÇµÚ¶þ¸öÄ£³Ë
+                        if(mm_info_in[1:0]==2'b10) begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                             array_a[1] <= res;
                             array_ready[1] <= 2'b11;
                         end
-                        else begin// Íê³ÉµÄÄ£³ËÊÇµÚÒ»¸öÄ£³Ë
+                        else begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                             if(array_e[1]==0) begin
                                 z <= res;
                                 array_r[1] <= res;
@@ -545,11 +548,11 @@ module me_controller#(
                         end
                     end
                     else if(act_i[2]==TYPE_me) begin
-                        if(mm_info_in[1:0]==2'b10) begin// Íê³ÉµÄÄ£³ËÊÇµÚ¶þ¸öÄ£³Ë
+                        if(mm_info_in[1:0]==2'b10) begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                             array_a[2] <= res;
                             array_ready[2] <= 2'b11;
                         end
-                        else begin// Íê³ÉµÄÄ£³ËÊÇµÚÒ»¸öÄ£³Ë
+                        else begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                             if(array_e[2]==0) begin
                                 z <= res;
                                 array_r[2] <= res;
@@ -576,11 +579,11 @@ module me_controller#(
                         end
                     end
                     else if(act_i[3]==TYPE_me) begin
-                        if(mm_info_in[1:0]==2'b10) begin// Íê³ÉµÄÄ£³ËÊÇµÚ¶þ¸öÄ£³Ë
+                        if(mm_info_in[1:0]==2'b10) begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½ÇµÚ¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                             array_a[3] <= res;
                             array_ready[3] <= 2'b11;
                         end
-                        else begin// Íê³ÉµÄÄ£³ËÊÇµÚÒ»¸öÄ£³Ë
+                        else begin// ï¿½ï¿½Éµï¿½Ä£ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½Ä£ï¿½ï¿½
                             if(array_e[3]==0) begin
                                 z <= res;
                                 array_r[3] <= res;
@@ -620,8 +623,8 @@ module me_controller#(
                 array_ready[3] <= 2'b11;
             end
             else if(array_ready[3]==2'b10&&!rempty3) rinc3 <= 1'b1;
-            /*****************************¶ÀÁ¢Â¼ÈëÄ£ÃÝ **********************************/
-            if(en_pre_me) begin ////////////////////////Â¼ÈëÐÂµÄÔ¤¼ÆËãÄ£ÃÝ
+            /*****************************ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ä£ï¿½ï¿½ **********************************/
+            if(en_pre_me) begin ////////////////////////Â¼ï¿½ï¿½ï¿½Âµï¿½Ô¤ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
                 if(act_i[0]==TYPE_IDLE) begin
                     array_r[0] <= 1;
                     array_e[0] <= e;
@@ -647,7 +650,7 @@ module me_controller#(
                     array_num[3] <= num;
                 end
             end
-            else if(en_me) begin ////////////////////////Â¼ÈëÐÂµÄÆÕÍ¨Ä£ÃÝ
+            else if(en_me) begin ////////////////////////Â¼ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½Í¨Ä£ï¿½ï¿½
                 if(act_i[0]==TYPE_IDLE) begin
                     array_r[0] <= 1;
                     array_a[0] <= a;
@@ -677,7 +680,7 @@ module me_controller#(
                     array_num[3] <= num;
                 end
             end
-            else if(en_one_mm) begin ///////////Â¼ÈëÆäËûÀàÐÍ²Ù×÷
+            else if(en_one_mm) begin ///////////Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½
                 if(act_i[0]==TYPE_IDLE) begin
                     array_r[0] <= 0;
                     array_a[0] <= a;
@@ -804,7 +807,7 @@ module me_controller#(
             end
         end
     end
-/******************************** Ô¤¼ÆËã±í¶ÁÈ¡Æô¶¯ ************************************/   
+/******************************** Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ ************************************/   
     always@(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
             en_pre_me0 <= 0;
@@ -816,7 +819,7 @@ module me_controller#(
             e_2 <= 0;
             e_3 <= 0;
         end
-        else if(en_pre_me) begin ////////////////////////Â¼ÈëÐÂµÄÔ¤¼ÆËãÄ£ÃÝ
+        else if(en_pre_me) begin ////////////////////////Â¼ï¿½ï¿½ï¿½Âµï¿½Ô¤ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
             if(act_i[0]==TYPE_IDLE) begin
                 en_pre_me0 <= 1;
                 en_pre_me1 <= 0;

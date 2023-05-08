@@ -226,6 +226,9 @@ module phase_a
     end
 
     always @(*) begin
+        if(~rst_n) begin
+			new_a <= 0;
+		end
         case (cnt_4)
             3'd3: new_a = c_addition_1[Size+1]?c_res:c_addition_1;
             default: ;
