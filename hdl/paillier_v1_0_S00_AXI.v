@@ -1,7 +1,14 @@
+parameter M_SIZE = 3072;
+parameter RADIX = 72;
+parameter SIZE_LOG = 6;
+parameter FIFO_DEPTH = 4;
+parameter FIFO_AddrWidth = 2;
+parameter SIZE_ADD = 128*25;
+parameter URAM_ADDR = 12;
 
 `timescale 1 ns / 1 ps
 
-	module one_mm_v1_0_S00_AXI #
+	module paillier_v1_0_S00_AXI #
 	(
 		// Users to add parameters here
 
@@ -622,13 +629,7 @@
 	integer	 byte_index;
 	reg	 aw_en;
 	// user interface
-    parameter M_SIZE = 3072;
-    parameter RADIX = 72;
-    parameter SIZE_LOG = 6;
-    parameter FIFO_DEPTH = 4;
-    parameter FIFO_AddrWidth = 2;
-    parameter SIZE_ADD = 128*25;
-    parameter URAM_ADDR = 12;
+
     
     wire done;
     wire [M_SIZE-1:0] z;

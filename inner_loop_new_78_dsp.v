@@ -204,26 +204,27 @@ module inner_loop_new_78_dsp
 			r1 <= 3152'h0;
 		end
 		*/
-		else if(flag) begin
-			for(k=0;k<blocks;k=k+1) begin
-				r0[(radix*k)+:radix] <= add2_res[k][radix-1:0];
-				r1[(radix*(k+1))+:radix] <= add2_res[k][radix*2-1:radix];
-			end
-		end
-		else begin
-			for(k=blocks;k<blocks*2;k=k+1) begin
-				if(k == blocks*2-1) begin
-					// special case due to the imbalance partition
-					r0[(radix*k)+:radix] <= add2_res[k-blocks][radix-1:0];
-					r1[3151:3120] <= add2_res[19][109:78];
-				end
-				else begin
-					r0[(radix*k)+:radix] <= add2_res[k-blocks][radix-1:0];
-					r1[(radix*(k+1))+:radix] <= add2_res[k-blocks][radix*2-1:radix];
+		else begin 
+			if(flag) begin
+				for(k=0;k<blocks;k=k+1) begin
+					r0[(radix*k)+:radix] <= add2_res[k][radix-1:0];
+					r1[(radix*(k+1))+:radix] <= add2_res[k][radix*2-1:radix];
 				end
 			end
+			else begin
+				for(k=blocks;k<blocks*2;k=k+1) begin
+					if(k == blocks*2-1) begin
+						// special case due to the imbalance partition
+						r0[(radix*k)+:radix] <= add2_res[k-blocks][radix-1:0];
+						r1[3151:3120] <= add2_res[19][109:78];
+					end
+					else begin
+						r0[(radix*k)+:radix] <= add2_res[k-blocks][radix-1:0];
+						r1[(radix*(k+1))+:radix] <= add2_res[k-blocks][radix*2-1:radix];
+					end
+				end
+			end
 		end
-		
 	end
 
 	assign en_out = cnt == 3'd4;
