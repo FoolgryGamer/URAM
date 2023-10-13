@@ -33,7 +33,7 @@ module inner_loop_new_78_dsp
 	output en_out
     );
 	localparam blocks = 20;
-	localparam add_size = 43;
+	localparam add_size = 46;
 	//**********************************
 
 	// integer used for counting
@@ -44,7 +44,7 @@ module inner_loop_new_78_dsp
 	// new 108*108 multiplier parameter part and the parameter of the associated adder
 	wire [add_size-1:0] multi_res_0[blocks-1:0],multi_res_1[blocks-1:0],multi_res_2[blocks-1:0],multi_res_3[blocks-1:0],multi_res_4[blocks-1:0],multi_res_5[blocks-1:0];
 	wire [add_size-1:0] multi_res_6[blocks-1:0],multi_res_7[blocks-1:0],multi_res_8[blocks-1:0],multi_res_9[blocks-1:0],multi_res_10[blocks-1:0],multi_res_11[blocks-1:0];
-	wire [add_size-1:0] multi_res_12[blocks-1:0],multi_res_13[blocks-1:0],multi_res_14[blocks-1:0];
+	// wire [add_size-1:0] multi_res_12[blocks-1:0],multi_res_13[blocks-1:0],multi_res_14[blocks-1:0];
 	//reg [add_size-1:0] add1_a_0[blocks-1:0],add1_a_1[blocks-1:0],add1_a_2[blocks-1:0],add1_a_3[blocks-1:0],add1_a_4[blocks-1:0],add1_a_5[blocks-1:0];
 	//reg [add_size-1:0] add1_a_6[blocks-1:0],add1_a_7[blocks-1:0],add1_a_8[blocks-1:0],add1_a_9[blocks-1:0],add1_a_10[blocks-1:0],add1_a_11[blocks-1:0];
 	//reg [add_size-1:0] add1_a_12[blocks-1:0],add1_a_13[blocks-1:0],add1_a_14[blocks-1:0];
@@ -232,8 +232,8 @@ module inner_loop_new_78_dsp
 	genvar i;
 	generate
 		for(i=0;i<blocks;i=i+1) begin
-			multi multi_n(multi_a[i], bi, clk,multi_res_0[i],multi_res_1[i],multi_res_2[i],multi_res_3[i],multi_res_4[i],multi_res_5[i],multi_res_6[i],multi_res_7[i],multi_res_8[i],multi_res_9[i],multi_res_10[i],multi_res_11[i],multi_res_12[i],multi_res_13[i],multi_res_14[i]);
-			add1#(.radix(radix)) add1_n(multi_res_0[i],multi_res_1[i],multi_res_2[i],multi_res_3[i],multi_res_4[i],multi_res_5[i],multi_res_6[i],multi_res_7[i],multi_res_8[i],multi_res_9[i],multi_res_10[i],multi_res_11[i],multi_res_12[i],multi_res_13[i],multi_res_14[i],add1_res_0[i],add1_res_1[i],add1_res_2[i]);
+			multi multi_n(multi_a[i], bi, clk,multi_res_0[i],multi_res_1[i],multi_res_2[i],multi_res_3[i],multi_res_4[i],multi_res_5[i],multi_res_6[i],multi_res_7[i],multi_res_8[i],multi_res_9[i],multi_res_10[i],multi_res_11[i]);
+			add1#(.radix(radix)) add1_n(multi_res_0[i],multi_res_1[i],multi_res_2[i],multi_res_3[i],multi_res_4[i],multi_res_5[i],multi_res_6[i],multi_res_7[i],multi_res_8[i],multi_res_9[i],multi_res_10[i],multi_res_11[i],add1_res_0[i],add1_res_1[i],add1_res_2[i]);
 			add2_adder_3#(.adder_size(radix*2)) add2_n(add2_a_0[i], add2_a_1[i],add2_a_2[i], add2_res[i]);
 		end
 	endgenerate
